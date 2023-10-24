@@ -21,6 +21,14 @@
   margin-left: 10px;
 }
 
+.btn--normal {
+  padding: 1rem;
+  border-radius: 4px;
+}
+.btn--normal:hover {
+  background-color: rgb(208, 207, 207);
+}
+
 .btn--dark {
   background-color: var(--theme-color);
   color: var(--text-primaryColor);

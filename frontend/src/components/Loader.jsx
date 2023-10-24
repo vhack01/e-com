@@ -4,8 +4,8 @@ const Loader = () => {
   return (
     <div className="loader">
       <Oval
-        height={80}
-        width={80}
+        height={50}
+        width={50}
         color="#ffbf00"
         wrapperStyle={{}}
         wrapperClass=""

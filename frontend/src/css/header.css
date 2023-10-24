@@ -6,7 +6,7 @@
   justify-content: space-between;
   align-items: center;
   position: relative;
-  padding: 1.5rem 3rem;
+  padding: 1.2rem 3rem;
 }
 
 .logo {
@@ -14,8 +14,21 @@
   object-fit: contain;
 }
 
+.header__title {
+  font-size: 2.3rem;
+  margin: 0;
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
 .navbar__brand-title {
+  display: flex;
+
   font-size: var(--text-header-size);
+}
+
+.navbar__brand-title h3 {
+  margin: 0;
 }
 
 .navbar__list {
@@ -26,6 +39,7 @@
 
 .navbar__list-item {
   margin-left: 1.5rem;
+  cursor: pointer;
 }
 
 .navbar__item {
@@ -125,4 +139,10 @@
 .dropdown-item:hover {
   color: #fff;
   background-color: rgb(145, 145, 145);
+}
+
+div.header__signin_a {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }

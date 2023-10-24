@@ -1,23 +1,31 @@
 import "../css/productScreen.css";
 import { Link, useParams } from "react-router-dom";
 import { BiCartAlt, BiSolidCreditCardFront } from "react-icons/bi";
-import { useGetProductsDetailsQuery } from "../slices/productsApiSlice";
-import { useBootstrapBreakpoints } from "react-bootstrap/esm/ThemeProvider";
+import {
+  useCreateReviewMutation,
+  useGetProductsDetailsQuery,
+} from "../slices/productsApiSlice";
 import { BiMinus, BiPlus } from "react-icons/bi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { addItem } from "../slices/cartSlice";
+import { toast } from "react-toastify";
 import IconButton from "../components/IconButton";
 import Rating from "../components/Rating";
 import RoundButton from "../components/RoundButton";
 import Loader from "../components/Loader";
 import ErrorMessage from "../components/ErrorMessage";
+import { ColorRing } from "react-loader-spinner";
+import Meta from "../components/Meta";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
   const [qty, setQty] = useState(1);
 
@@ -25,9 +33,15 @@ const ProductScreen = () => {
     data: currentProduct,
     isLoading,
     error,
+    refetch,
   } = useGetProductsDetailsQuery(productId);
 
-  console.log("product: ", currentProduct);
+  const [createReview, { isLoading: isReviewLoading, error: reviewError }] =
+    useCreateReviewMutation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  // console.log("current product: ", currentProduct);
 
   const handleCounter = (action) => {
     switch (action) {
@@ -48,6 +62,21 @@ const ProductScreen = () => {
     navigate("/cart");
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // console.log("rating:", rating);
+    // console.log("comment:", comment);
+    try {
+      await createReview({ _id: productId, rating, comment }).unwrap();
+      refetch();
+      toast.success("Review added");
+      setRating(0);
+      setComment("");
+    } catch (err) {
+      toast.error("You have already reviewed");
+    }
+  };
+
   return (
     <>
       {isLoading ? (
@@ -56,6 +85,10 @@ const ProductScreen = () => {
         <ErrorMessage variant="danger">{error?.data.message}</ErrorMessage>
       ) : (
         <div className="main--container">
+          <Meta
+            title={currentProduct.name}
+            description={currentProduct.description}
+          />
           <div className="product__detail">
             <div className="product__back">
               <Link to={`/`}>
@@ -160,6 +193,109 @@ const ProductScreen = () => {
                   )}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Reviews */}
+          <div className="review_box">
+            <div className="login__container">
+              <div className="review_title">Reviews</div>
+
+              <div className="reviewContainer">
+                {currentProduct.reviews.length === 0 && (
+                  <div className="review_title no_reviews">No reviews...</div>
+                )}
+
+                {currentProduct.reviews.map((review) => (
+                  <div className="showReviews" key={review._id}>
+                    <div className="review__heading">
+                      <div className="review__name">{review.name}</div>
+                      <div className="review__createOn">
+                        [{review?.timestamp}]
+                      </div>
+                    </div>
+                    <div className="review__rating">
+                      <Rating value={review.rating} text={review.rating} />
+                    </div>
+                    <div className="review__comment">{review.comment}</div>
+                  </div>
+                ))}
+              </div>
+
+              {userInfo ? (
+                <>
+                  <div className="review_title write_review">
+                    Write a review
+                  </div>
+                  <form onSubmit={handleSubmit}>
+                    <div className="login__form-group review_form-group">
+                      <div className="login__form-group-item">
+                        <label
+                          htmlFor="rating"
+                          className="login__form-group-item-label form-group-item-label"
+                        >
+                          Rating
+                        </label>
+                        <select
+                          id="rating"
+                          onChange={(e) => setRating(e.target.value)}
+                          className="login__form-group-item-input form-group-item-input"
+                          defaultValue={"DEFAULT"}
+                        >
+                          <option value="DEFAULT">Select...</option>
+                          <option value={1}>1. Poor</option>
+                          <option value={2}>2. Fair</option>
+                          <option value={3}>3. Good</option>
+                          <option value={4}>4. Very Good</option>
+                          <option value={5}>5. Excellent</option>
+                        </select>
+                      </div>
+
+                      <div className="login__form-group-item">
+                        <label
+                          htmlFor="comment"
+                          className="login__form-group-item-label form-group-item-label"
+                        >
+                          Comment
+                        </label>
+                        <textarea
+                          name="comment"
+                          id="comment"
+                          cols="30"
+                          rows="10"
+                          value={comment}
+                          className="login__form-group-item-input form-group-item-input"
+                          placeholder="Leave your comment"
+                          onChange={(e) => setComment(e.target.value)}
+                          spellCheck="false"
+                        ></textarea>
+                      </div>
+
+                      <div className="login__form-group-item">
+                        <button
+                          type="submit"
+                          className="btn btn-formSubmit"
+                          disabled={isReviewLoading}
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </>
+              ) : (
+                <h3>
+                  Please{" "}
+                  <Link to={"/login"}>
+                    <span
+                      style={{ color: "#444", textDecoration: "underline" }}
+                    >
+                      sign in
+                    </span>
+                  </Link>{" "}
+                  to write a review
+                </h3>
+              )}
             </div>
           </div>
         </div>

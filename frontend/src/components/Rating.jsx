@@ -1,6 +1,6 @@
 import { BiSolidStar, BiSolidStarHalf, BiStar } from "react-icons/bi";
 
-const Rating = ({ value, text }) => {
+const Rating = ({ value, text = "" }) => {
   return (
     <>
       <div className="rating">

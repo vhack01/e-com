@@ -120,8 +120,7 @@
 /* ------- Loader ----------- */
 .loader {
   /* height: 100vh;
-  width: 100%;
-  background-color: #5555; */
+  width: 100%; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -158,4 +157,63 @@
   font-size: 1.5rem;
   text-align: center;
   /* background-color: red; */
+}
+
+/* ******************** REVIEWS ********************** */
+.review_box {
+  margin-top: 2rem;
+}
+
+.review_title {
+  border: 2px solid rgb(120, 219, 255);
+  background-color: rgb(155, 219, 251);
+  color: rgb(10, 130, 174);
+  font-size: 1.5rem;
+  padding: 1rem 2rem;
+  border-radius: 4px;
+}
+
+.review_form-group {
+  margin-top: 2rem;
+}
+
+.showReviews {
+  border: 1px solid rgb(230, 230, 230);
+  padding: 1rem;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.showReviews > div {
+  margin-top: 0.6rem;
+}
+
+.review__heading {
+  display: flex;
+  align-items: center;
+}
+
+.review__name {
+  font-weight: bold;
+}
+
+.review__createOn {
+  font-size: 1.2rem;
+  text-transform: capitalize;
+  margin-left: 1rem;
+}
+
+.no_reviews {
+  background-color: rgb(255, 117, 117);
+  color: rgb(189, 30, 30);
+  border: 2px solid rgb(243, 98, 98);
+  margin-top: 1rem;
+}
+
+.write_review {
+  background-color: rgb(139 228 161);
+  color: rgb(31 78 42);
+  border: 2px solid rgb(113 208 134);
+  margin-top: 3rem;
 }

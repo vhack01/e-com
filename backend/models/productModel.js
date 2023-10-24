@@ -5,7 +5,6 @@ const reviewSchema = mongoose.Schema(
     user: {
       // which user has added that product
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: "User",
     },
     name: {
@@ -16,7 +15,7 @@ const reviewSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    Comment: {
+    comment: {
       type: String,
       required: true,
     },

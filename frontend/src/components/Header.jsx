@@ -1,11 +1,13 @@
-import { useRef, useState } from "react";
+import logo from "../assets/light-logo.png";
+import { useEffect, useRef, useState } from "react";
 import "../css/header.css";
 import { BiMenu, BiUserCircle, BiCart, BiChevronDown } from "react-icons/bi";
-import logo from "../assets/light-logo.png";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/userApiSlice";
 import { logout } from "../slices/authSlice";
+import Sidebar from "./admin_component/sidebar";
+import Searchbox from "./Searchbox";
 
 const Header = () => {
   const navListRef = useRef();
@@ -32,14 +34,21 @@ const Header = () => {
     }
   };
 
+  const handleDashboard = () => {
+    navigate("/admin/dashboard");
+  };
+
   return (
     <>
-      <nav className="navbar ">
+      <nav className="navbar">
         <Link to={`/`}>
           <div className="navbar__brand-title">
             <img src={logo} alt={"logo"} className="logo" />
+            <h2 className="header__title">Proshop</h2>
           </div>
         </Link>
+
+        <Searchbox />
 
         <div
           className="navbar__toggle icon--reactangle"
@@ -79,7 +88,7 @@ const Header = () => {
                       className="dropdown_box"
                       style={{ display: dropdown ? "block" : "none" }}
                     >
-                      <NavLink to="">
+                      <NavLink to={"/profile"}>
                         <div className="dropdown-item dropdown-item-1">
                           Profile
                         </div>
@@ -96,11 +105,23 @@ const Header = () => {
                   </div>
                 ) : (
                   <NavLink to={`/login`}>
-                    <BiUserCircle className="icon icon--sm" />
-                    <div>Sign In</div>
+                    <div className="header__signin_a">
+                      <BiUserCircle className="icon icon--sm" />
+                      <div>Sign In</div>
+                    </div>
                   </NavLink>
                 )}
               </div>
+            </li>
+            <li className="navbar__list-item">
+              {userInfo?.isAdmin && (
+                <div
+                  className="navbar__dropdown-name"
+                  onClick={() => handleDashboard()}
+                >
+                  Dashboard
+                </div>
+              )}
             </li>
           </ul>
         </div>
